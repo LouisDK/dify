@@ -13,7 +13,7 @@ const Contribute: FC = () => {
   const { t } = useTranslation()
 
   return (
-/*     <a
+    <a
       href='https://github.com/langgenius/dify/blob/main/api/core/tools/README.md'
       target='_blank'
       rel='noopener noreferrer'
@@ -34,7 +34,7 @@ const Contribute: FC = () => {
         <div className='grow leading-[18px] text-xs font-normal'>{t('tools.contribute.viewGuide')}</div>
         <ArrowUpRight className='w-3 h-3' />
       </div>
-    </a> */
+    </a>
   )
 }
 export default React.memo(Contribute)
