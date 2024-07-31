@@ -16,7 +16,7 @@ const translation = {
     },
   },
   apps: {
-    title: 'Explore Apps by Dify',
+    title: 'Explore Business Capabilities by Netsurit Innovate',
     description: 'Use these template apps instantly or customize your own apps based on the templates.',
     allCategories: 'Recommended',
   },
