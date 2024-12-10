@@ -13,6 +13,8 @@ const translation = {
         status: '상태',
         action: '동작',
       },
+      name: '이름',
+      rename: '이름 바꾸기',
     },
     action: {
       uploadFile: '새 파일 업로드',
@@ -74,6 +76,7 @@ const translation = {
       error: '가져오기 오류',
       ok: '확인',
     },
+    addUrl: 'URL 추가',
   },
   metadata: {
     title: '메타데이터',
@@ -217,7 +220,7 @@ const translation = {
         paragraphs: '문단',
         hitCount: '검색 횟수',
         embeddingTime: '임베딩 시간',
-        embeddedSpend: '임베딩 시간',
+        embeddedSpend: '임베딩 소모',
       },
     },
     languageMap: {

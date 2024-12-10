@@ -4,8 +4,9 @@ const translation = {
   dateTimeFormat: 'MM/DD/YYYY hh:mm A',
   table: {
     header: {
-      time: 'زمان',
-      endUser: 'کاربر نهایی',
+      updatedTime: 'زمان به‌روزرسانی',
+      time: 'زمان ایجاد',
+      endUser: 'کاربر نهایی یا حساب',
       input: 'ورودی',
       output: 'خروجی',
       summary: 'عنوان',
@@ -16,7 +17,7 @@ const translation = {
       status: 'وضعیت',
       runtime: 'زمان اجرا',
       tokens: 'توکن‌ها',
-      user: 'کاربر نهایی',
+      user: 'کاربر نهایی یا حساب',
       version: 'نسخه',
     },
     pagination: {
@@ -69,12 +70,17 @@ const translation = {
       annotated: 'بهبودهای حاشیه‌نویسی شده ({{count}} آیتم)',
       not_annotated: 'حاشیه‌نویسی نشده',
     },
+    sortBy: 'مرتب‌سازی بر اساس:',
+    descending: 'نزولی',
+    ascending: 'صعودی',
   },
   workflowTitle: 'لاگ‌های جریان کاری',
   workflowSubtitle: 'لاگ عملیات خودکار را ثبت کرده است.',
   runDetail: {
     title: 'لاگ مکالمه',
     workflowTitle: 'جزئیات لاگ',
+    fileListLabel: 'جزئیات فایل',
+    fileListDetail: 'جزئیات',
   },
   promptLog: 'لاگ درخواست',
   agentLog: 'لاگ عامل',

@@ -6,7 +6,7 @@ const translation = {
     header: {
       updatedTime: '更新時間',
       time: '作成時間',
-      endUser: 'エンドユーザー',
+      endUser: 'エンドユーザーまたはアカウント',
       input: '入力',
       output: '出力',
       summary: 'タイトル',
@@ -17,7 +17,7 @@ const translation = {
       status: 'ステータス',
       runtime: 'ランタイム',
       tokens: 'トークン',
-      user: 'エンドユーザー',
+      user: 'エンドユーザーまたはアカウント',
       version: 'バージョン',
     },
     pagination: {
@@ -79,6 +79,8 @@ const translation = {
   runDetail: {
     title: '会話ログ',
     workflowTitle: 'ログの詳細',
+    fileListLabel: 'ファイルの詳細',
+    fileListDetail: '詳細',
   },
   promptLog: 'プロンプトログ',
   agentLog: 'エージェントログ',
