@@ -10,7 +10,7 @@ Dify にコントリビュートしたいとお考えなのですね。それは
 
 ## 飛び込む前に
 
-[既存の Issue](https://github.com/langgenius/dify/issues?q=is:issue+is:closed) を探すか、[新しい Issue](https://github.com/langgenius/dify/issues/new/choose) を作成してください。私たちは Issue を 2 つのタイプに分類しています。
+[既存の Issue](https://github.com/langgenius/dify/issues?q=is:issue+is:open) を探すか、[新しい Issue](https://github.com/langgenius/dify/issues/new/choose) を作成してください。私たちは Issue を 2 つのタイプに分類しています。
 
 ### 機能リクエスト
 
@@ -74,7 +74,7 @@ Dify を構築するには次の依存関係が必要です。それらがシス
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Node.js v18.x (LTS)](http://nodejs.org)
 - [npm](https://www.npmjs.com/) version 8.x.x or [Yarn](https://yarnpkg.com/)
-- [Python](https://www.python.org/) version 3.10.x
+- [Python](https://www.python.org/) version 3.11.x or 3.12.x
 
 ### 4. インストール
 

@@ -1,12 +1,51 @@
-from pydantic import Field, computed_field
-from pydantic_settings import SettingsConfigDict
+import logging
+from typing import Any
 
-from configs.deploy import DeploymentConfig
-from configs.enterprise import EnterpriseFeatureConfig
-from configs.extra import ExtraServiceConfig
-from configs.feature import FeatureConfig
-from configs.middleware import MiddlewareConfig
-from configs.packaging import PackagingInfo
+from pydantic.fields import FieldInfo
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
+
+from .deploy import DeploymentConfig
+from .enterprise import EnterpriseFeatureConfig
+from .extra import ExtraServiceConfig
+from .feature import FeatureConfig
+from .middleware import MiddlewareConfig
+from .packaging import PackagingInfo
+from .remote_settings_sources import RemoteSettingsSource, RemoteSettingsSourceConfig, RemoteSettingsSourceName
+from .remote_settings_sources.apollo import ApolloSettingsSource
+
+logger = logging.getLogger(__name__)
+
+
+class RemoteSettingsSourceFactory(PydanticBaseSettingsSource):
+    def __init__(self, settings_cls: type[BaseSettings]):
+        super().__init__(settings_cls)
+
+    def get_field_value(self, field: FieldInfo, field_name: str) -> tuple[Any, str, bool]:
+        raise NotImplementedError
+
+    def __call__(self) -> dict[str, Any]:
+        current_state = self.current_state
+        remote_source_name = current_state.get("REMOTE_SETTINGS_SOURCE_NAME")
+        if not remote_source_name:
+            return {}
+
+        remote_source: RemoteSettingsSource | None = None
+        match remote_source_name:
+            case RemoteSettingsSourceName.APOLLO:
+                remote_source = ApolloSettingsSource(current_state)
+            case _:
+                logger.warning(f"Unsupported remote source: {remote_source_name}")
+                return {}
+
+        d: dict[str, Any] = {}
+
+        for field_name, field in self.settings_cls.model_fields.items():
+            field_value, field_key, value_is_complex = remote_source.get_field_value(field, field_name)
+            field_value = remote_source.prepare_field_value(field_name, field, field_value, value_is_complex)
+            if field_value is not None:
+                d[field_key] = field_value
+
+        return d
 
 
 class DifyConfig(
@@ -20,46 +59,38 @@ class DifyConfig(
     MiddlewareConfig,
     # Extra service configs
     ExtraServiceConfig,
+    # Remote source configs
+    RemoteSettingsSourceConfig,
     # Enterprise feature configs
     # **Before using, please contact business@dify.ai by email to inquire about licensing matters.**
     EnterpriseFeatureConfig,
 ):
-    DEBUG: bool = Field(default=False, description='whether to enable debug mode.')
-
     model_config = SettingsConfigDict(
         # read from dotenv format config file
-        env_file='.env',
-        env_file_encoding='utf-8',
-        frozen=True,
+        env_file=".env",
+        env_file_encoding="utf-8",
         # ignore extra attributes
-        extra='ignore',
+        extra="ignore",
     )
 
-    CODE_MAX_NUMBER: int = 9223372036854775807
-    CODE_MIN_NUMBER: int = -9223372036854775808
-    CODE_MAX_STRING_LENGTH: int = 80000
-    CODE_MAX_STRING_ARRAY_LENGTH: int = 30
-    CODE_MAX_OBJECT_ARRAY_LENGTH: int = 30
-    CODE_MAX_NUMBER_ARRAY_LENGTH: int = 1000
+    # Before adding any config,
+    # please consider to arrange it in the proper config group of existed or added
+    # for better readability and maintainability.
+    # Thanks for your concentration and consideration.
 
-    HTTP_REQUEST_MAX_CONNECT_TIMEOUT: int = 300
-    HTTP_REQUEST_MAX_READ_TIMEOUT: int = 600
-    HTTP_REQUEST_MAX_WRITE_TIMEOUT: int = 600
-    HTTP_REQUEST_NODE_MAX_BINARY_SIZE: int = 1024 * 1024 * 10
-
-    @computed_field
-    def HTTP_REQUEST_NODE_READABLE_MAX_BINARY_SIZE(self) -> str:
-        return f'{self.HTTP_REQUEST_NODE_MAX_BINARY_SIZE / 1024 / 1024:.2f}MB'
-
-    HTTP_REQUEST_NODE_MAX_TEXT_SIZE: int = 1024 * 1024
-
-    @computed_field
-    def HTTP_REQUEST_NODE_READABLE_MAX_TEXT_SIZE(self) -> str:
-        return f'{self.HTTP_REQUEST_NODE_MAX_TEXT_SIZE / 1024 / 1024:.2f}MB'
-
-    SSRF_PROXY_HTTP_URL: str | None = None
-    SSRF_PROXY_HTTPS_URL: str | None = None
-
-    MODERATION_BUFFER_SIZE: int = Field(default=300, description='The buffer size for moderation.')
-
-    MAX_VARIABLE_SIZE: int = Field(default=5 * 1024, description='The maximum size of a variable. default is 5KB.')
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
+        return (
+            init_settings,
+            env_settings,
+            RemoteSettingsSourceFactory(settings_cls),
+            dotenv_settings,
+            file_secret_settings,
+        )

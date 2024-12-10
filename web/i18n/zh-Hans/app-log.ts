@@ -6,7 +6,7 @@ const translation = {
     header: {
       updatedTime: '更新时间',
       time: '创建时间',
-      endUser: '用户',
+      endUser: '用户或账户',
       input: '输入',
       output: '输出',
       summary: '标题',
@@ -17,7 +17,7 @@ const translation = {
       status: '状态',
       runtime: '运行时间',
       tokens: 'TOKENS',
-      user: '用户',
+      user: '用户或账户',
       version: '版本',
     },
     pagination: {
@@ -79,6 +79,8 @@ const translation = {
   runDetail: {
     title: '对话日志',
     workflowTitle: '日志详情',
+    fileListLabel: '文件详情',
+    fileListDetail: '详情',
   },
   promptLog: 'Prompt 日志',
   agentLog: 'Agent 日志',
