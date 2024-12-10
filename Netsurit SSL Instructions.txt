@@ -1,0 +1,13 @@
+Copy the cert file to the docker/nginx/ssl directory.
+
+While in that directory, run:
+
+openssl pkcs12 -in 'star_netsurit_com_2024-2025.pfx' -clcerts -nokeys -out netsurit.crt -passin pass:12345
+openssl pkcs12 -in "star_netsurit_com_2024-2025.pfx" -nocerts -nodes -out netsurit.key -passin pass:12345
+
+
+Also ensure the .env file is pointing to the certificate files:
+NGINX_SSL_CERT_FILENAME=netsurit.crt
+NGINX_SSL_CERT_KEY_FILENAME=netsurit.key
+ 
+
